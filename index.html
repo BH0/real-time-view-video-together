@@ -40,6 +40,13 @@
             <b>Please use the coloured [video control] buttons otherwise things will not work</b>
     </div>
     <div class="pause-play" id="pause-play">Pause/Play</div> 
+    
+    <div id="video-selections">
+        <button id="one">One</button>
+        <button id="two">Two</button>
+        <button id="three">Three</button>
+        <button id="four">Four</button>
+    </div>
 
     <form action="">
         <!-- <input id="message" autocomplete="off" /> -- >  
@@ -48,12 +55,35 @@
     <ul id="messages"></ul>
     
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>    
     
     <script> 
     let socket = io(); 
 
     let video = document.getElementById("video");  
+
+    /* It may be possible to retrieve videos [from Youtube] using AJAX request */ 
+    /* Users can select video to watch (from range of videos) and JS will change the video element's src */ 
+    let selectionOne = document.getElementById("video-selections").querySelector("#one"); 
+    let selectionTwo = document.getElementById("video-selections").querySelector("#two"); 
+    let selectionThree = document.getElementById("video-selections").querySelector("#three"); 
+    let selectionFour = document.getElementById("video-selections").querySelector("#four"); 
+
+    selectionOne.addEventListener("click", () => { 
+        video.src = "https://www.w3schools.com/html/movie.mp4";
+        socket.emit("video-one-selected newSrc", "https://www.w3schools.com/html/movie.mp4");   
+    }); 
+    selectionTwo.addEventListener("click", () => { 
+        video.src = "https://www.w3schools.com/html/mov_bbb.mp4";  
+        socket.emit("video-two-selected newSrc", "https://www.w3schools.com/html/movie.mp4");   
+    }); 
+    selectionThree.addEventListener("click", () => { 
+        video.src = "";  
+    }); 
+    selectionFour.addEventListener("click", () => { 
+        video.src = ""; 
+    }); 
+
     let customVideoControls = document.getElementById("pause-play"); 
     let functionToSend; 
 
@@ -86,6 +116,14 @@
         */ 
     }); 
 
+    socket.on("video-one-selected newSrc", newSrc => { 
+        video.src = newSrc; 
+    }); 
+    socket.on("video-two-selected newSrc", newSrc => { 
+        video.src = newSrc; 
+    }); 
+
+
     /* 
     customVideoControls.addEventListener("click", e => { 
         if (video.paused) { 
@@ -108,9 +146,6 @@
         document.body.appendChild(messageDiv); 
         * 
     }); */ 
-
-    /* It may be possible to retrieve videos [from Youtube] using AJAX request */ 
-    /* Users can select video to watch (from range of videos) and JS will change the video element's src */ 
 
     </script>  
 </body>
